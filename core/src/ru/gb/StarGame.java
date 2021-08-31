@@ -1,31 +1,14 @@
 package ru.gb;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.Game;
 
-public class StarGame extends ApplicationAdapter {
-	private SpriteBatch batch;
-	private Texture background;
-	
+import ru.gb.screen.MenuScreen;
+
+public class StarGame extends Game {
+
 	@Override
 	public void create () {
-		batch = new SpriteBatch();
-		background = new Texture("space_background.png");
+		setScreen(new MenuScreen());
 	}
 
-	@Override
-	public void render () {
-		ScreenUtils.clear(0f, 0f, 0f, 1f);
-		batch.begin();
-		batch.draw(background, 0, 0);
-		batch.end();
-	}
-	
-	@Override
-	public void dispose () {
-		batch.dispose();
-		background.dispose();
-	}
 }
