@@ -1,61 +1,67 @@
 package ru.gb.screen;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.gb.base.BaseScreen;
+import ru.gb.math.Rect;
+import ru.gb.sprite.Background;
+import ru.gb.sprite.Logo;
 
 public class MenuScreen extends BaseScreen {
 
-    private Texture background;
     private Texture img;
+    private Texture bg;
 
-    private Vector2 position;
-    private Vector2 tmp_position;
-    private Vector2 touch;
-    private Vector2 v;
-
-    private final static float V_LEN = 0.5f;
+    private Background background;
+    private Logo logo;
 
     @Override
     public void show() {
         super.show();
-        background = new Texture("space_background.png");
         img = new Texture("badlogic.jpg");
-        position = new Vector2(0, 0);
-        tmp_position = new Vector2(0, 0);
-        touch = new Vector2(0, 0);
-        v = new Vector2();
+        bg = new Texture("textures/bg.png");
+
+        background = new Background(bg);
+        logo = new Logo(img);
+    }
+
+    @Override
+    public void resize(Rect worldBounds) {
+        super.resize(worldBounds);
+        background.resize(worldBounds);
+        logo.resize(worldBounds);
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
-        tmp_position.set(touch);
-        if (tmp_position.sub(position).len() > V_LEN) {
-            position.add(v);
-        } else {
-            position.set(touch);
-        }
-        batch.begin();
-        batch.draw(background, 0, 0);
-        batch.draw(img, position.x, position.y);
-        batch.end();
+        update(delta);
+        draw();
     }
 
     @Override
     public void dispose() {
         super.dispose();
         img.dispose();
-        background.dispose();
+        bg.dispose();
     }
 
     @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        touch.set(screenX, Gdx.graphics.getHeight() - screenY);
-        v.set(touch.cpy().sub(position).setLength(V_LEN));
-        return super.touchDown(screenX, screenY, pointer, button);
+    public boolean touchDown(Vector2 touch, int pointer, int button) {
+        logo.touchDown(touch, pointer, button);
+        return false;
+    }
+
+    private void update(float delta) {
+        logo.update(delta);
+    }
+
+    private void draw() {
+        batch.begin();
+        background.draw(batch);
+        logo.draw(batch);
+        batch.end();
     }
 
 }
